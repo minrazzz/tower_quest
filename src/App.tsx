@@ -120,6 +120,8 @@ function App() {
     );
   };
 
+  console.log(gameState?.currentFloor, gameState?.roundsRemaining);
+
   useEffect(() => {
     if (
       gameState?.autoPlay === true &&
@@ -127,39 +129,46 @@ function App() {
         gameState.roundsRemaining > 0) ||
         gameState?.roundsRemaining === "Infinity")
     ) {
-      console.log("hello");
-      if (gameState?.currentFloor !== 8) {
-        setGameState((prev) => ({
-          ...prev,
-          points: Math.max(prev?.points - 5, 0),
-        }));
-      }
-      const timeOutId = setInterval(() => {
-        const boxIndex = Math.floor(
-          Math.random() *
-            gameState?.boxes?.[gameState?.currentFloor - 1]?.length
-        );
-        handleBoxClick(boxIndex);
+      // if (gameState?.currentFloor !== 8) {
+      //   setGameState((prev) => ({
+      //     ...prev,
+      //     points: Math.max(prev?.points - 5, 0),
+      //   }));
+      // }
 
-        if (gameState?.currentFloor > 8 || gameState?.points == 0) {
+      if (gameState?.currentFloor < 8) {
+        console.log("hello");
+        const timeOutId = setInterval(() => {
+          const boxIndex = Math.floor(
+            Math.random() *
+              gameState?.boxes?.[gameState?.currentFloor - 1]?.length
+          );
+          handleBoxClick(boxIndex);
+
           setGameState((prev) => ({
             ...prev,
             autoPlay: false,
             roundsRemaining: 0,
           }));
-          clearInterval(timeOutId);
+        }, 1000);
+        if (gameState?.currentFloor === 8) {
+          return () => clearInterval(timeOutId);
         }
-      }, 3000);
+      }
 
-      return () => clearInterval(timeOutId);
+      // return () => clearInterval(timeOutId);
     }
-  }, [gameState?.autoPlay, gameState?.roundsRemaining]);
+  }, [
+    gameState?.autoPlay,
+    gameState?.roundsRemaining,
+    gameState?.currentFloor,
+  ]);
 
-  useEffect(() => {
-    if (gameState?.autoPlay === false) {
-      alert("hello");
-    }
-  }, [gameState?.autoPlay]);
+  // useEffect(() => {
+  //   if (gameState?.autoPlay === false) {
+  //     alert("hello");
+  //   }
+  // }, [gameState?.autoPlay]);
   const handleSetRemainingRound = () => {
     setGameState((prev) => ({
       ...prev,
@@ -259,7 +268,7 @@ function App() {
             </select>
           </nav>
           <div className="flex-1 flex flex-col items-center justify-center">
-            {gameState?.isplaying && gameState?.autoPlay && (
+            {(gameState?.isplaying || gameState?.autoPlay) && (
               <div className=" w-full max-w-[500px] space-y-1 border flex  flex-col-reverse">
                 {gameState?.boxes &&
                   gameState?.boxes?.length > 0 &&
@@ -284,9 +293,7 @@ function App() {
                               className=""
                               onClick={() => handleBoxClick(idx as number)}
                             >
-                              <span className="textd-white">
-                                {box?.content}
-                              </span>
+                              <span className="text-black">{box?.content}</span>
                             </button>
                           </div>
                         ))}
