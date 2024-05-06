@@ -104,8 +104,6 @@ function App() {
     setRounds(1);
   }, []);
 
-  // console.log(gameState?.roundsRemaining);
-
   const handleBoxClick = (boxIndex: number) => {
     setBoxIndex(boxIndex);
     const newBoxes = [...gameState.boxes];
@@ -138,7 +136,6 @@ function App() {
         currentFloor: gameState?.currentFloor + 1,
       }));
     }
-    // setBoxIndex(null);
   };
 
   useEffect(() => {
@@ -163,7 +160,7 @@ function App() {
           gameOver: true,
         }));
       }
-    }, 1200);
+    }, 1300);
   }, [gameState?.roundsRemaining, gameState?.points, gameState?.currentFloor]);
 
   // helpers
@@ -369,28 +366,35 @@ function App() {
                 )}
                 <div className="flex-1 flex flex-col w-full">
                   {gameState?.isplaying === false &&
-                    gameState?.autoPlay === false && (
-                      <div className="w-full flex gap-x-1">
-                        <input
-                          type="number"
-                          placeholder="Enter the required rounds"
-                          className="w-full max-w-[250px] p-2 border outline-none focus:outline-none rounded-md"
-                          value={rounds as number}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            setRounds(Number(e.target.value));
-                          }}
-                        />
-                        <button
-                          onClick={handleSetRemainingRound}
-                          type="submit"
-                          className="border border-l-0 px-3 p-2 bg-blue-700 text-white rounded-md hover:opacity-80"
-                        >
-                          AddRounds
-                        </button>
-                      </div>
-                    )}
+                  gameState?.autoPlay === false ? (
+                    <div className="w-full flex gap-x-1">
+                      <input
+                        type="number"
+                        placeholder="Enter the required rounds"
+                        className="w-full max-w-[250px] p-2 border outline-none focus:outline-none rounded-md"
+                        value={rounds as number}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setRounds(Number(e.target.value));
+                        }}
+                      />
+                      <button
+                        onClick={handleSetRemainingRound}
+                        type="submit"
+                        className="border border-l-0 px-3 p-2 bg-blue-700 text-white rounded-md hover:opacity-80"
+                      >
+                        AddRounds
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-end gap-x-1">
+                      <span className="text-lg font-semibold text-blue-700">
+                        Difficulty
+                      </span>
+                      <span className="text-3xl font-semibold text-blue-800">
+                        {difficultvalue}
+                      </span>
+                    </div>
+                  )}
                   <p className="text-sm font-semibold text-blue-700 pl-7">or</p>
                   {gameState?.autoPlay === false ? (
                     <button
@@ -402,7 +406,7 @@ function App() {
                   ) : (
                     <button
                       onClick={handleAutoPlayStopClick}
-                      className="w-fit px-4 border bg-blue-700 text-white"
+                      className="w-fit px-4 border py-1 bg-red-700 text-white rounded-md hover:opacity-80"
                     >
                       Stop Auto
                     </button>
