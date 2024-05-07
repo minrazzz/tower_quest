@@ -13,7 +13,15 @@ export default function GameOver({ gameState, resetGame }: GameOverProps) {
         gameState?.points > 0 &&
         (gameState?.roundsRemaining as number) > 0 ? (
           <h1 className="font-bold text-[50px] text-blue-700 font-mono">
-            Game Over
+            Game Over{""}
+            <div>
+              <span>Rounds</span>
+              <span>{gameState?.roundsRemaining}</span>
+            </div>
+            <div>
+              <span>Rounds</span>
+              <span>{gameState?.points}</span>
+            </div>
           </h1>
         ) : (
           <h1 className="font-bold text-[50px] text-blue-700 font-mono">
